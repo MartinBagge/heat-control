@@ -1,5 +1,9 @@
-mod rust_scraper;
+mod webscraper;
 
 fn main(){
-    rust_scraper::scrape_prices();
+    let prices = crate::webscraper::scrape_prices();
+    for i in 0..prices.len(){
+        println!("{}", prices[i].date);
+        println!("{}", prices[i].price);
+    }
 }
