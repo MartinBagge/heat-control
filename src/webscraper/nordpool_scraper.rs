@@ -1,5 +1,3 @@
-use scraper::Html;
-use serde_json::{json, Result};
 use serde::{Deserialize, Serialize};
 use std::string::String;
 //use scraper

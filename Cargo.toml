@@ -16,6 +16,7 @@ env = "*"
 chrono = "*"
 nokhwa = {version = "^0.9.3", features=["default", "input-v4l"]}
 image = "*"
+gpio = "0.4.1"
 
 [[bin]]
 name = "raspberry_pi_heat_control"

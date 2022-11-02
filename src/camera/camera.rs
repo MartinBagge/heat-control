@@ -1,24 +1,26 @@
 use nokhwa::{CameraFormat, FrameFormat, Camera};
-use image::{DynamicImage, GrayImage, RgbImage, ImageBuffer};
-use chrono::Utc;
+use image::{DynamicImage, GrayImage, RgbImage};
 use std::{thread, time};
+use std::sync::mpsc;
 
 fn analyze_frame(frame: GrayImage) -> bool{
     let mut sum:u64 = 0;
 
-    for (x, y, p) in luma.enumerate_pixels() {
+    for (x, y, p) in frame.enumerate_pixels() {
         sum = sum + p[0] as u64;
     }
 
     let avg = sum as f32 / (frame.width()*frame.height()) as f32;
     
     if avg > 50.0 {
+        println!("light");
         return true;
     }
+    println!("dark");
     return false;
 }
 
-pub fn run_camera(){
+pub fn run_camera(tx: mpsc::Sender<bool>){
 
     // set up the Camera
     let mut camera = Camera::new(
@@ -41,9 +43,7 @@ pub fn run_camera(){
 
         let luma: GrayImage = DynamicImage::ImageRgb8(rgb.unwrap()).into_luma8();
 
-        if analyze_frame() {
-            
-        }
+        tx.send(analyze_frame(luma)).unwrap();
 
         thread::sleep(time::Duration::from_millis((500 as u64)-(loop_time.elapsed().as_millis() as u64)));
 
